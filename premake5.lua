@@ -7,7 +7,7 @@ workspace "AsteroidsGame"
 project "raylib"
     kind "StaticLib"
     language "C"
-    targetdir ("Binary/%{cfg.buildcfg}/raylib")
+    targetdir ("Binary/%{cfg.buildcfg}/%{cfg.platform}/raylib")
 
     files
     {
@@ -32,6 +32,7 @@ project "raylib"
 
     filter "configurations:Debug"
         runtime "Debug"
+        defines {"DEBUG"}
         symbols "on"
 
     filter "configurations:Release"
@@ -42,12 +43,13 @@ project "raylib"
 project "Asteroids"
     kind "ConsoleApp"
     language "C++"
-    targetdir ("Binary/%{cfg.buildcfg}/Asteroids")
+    targetdir ("Binary/%{cfg.buildcfg}/%{cfg.platform}/Asteroids")
 
     files
     {
         "Asteroids/Include/*.h",
-        "Asteroids/Source/*.cpp"
+        "Asteroids/Source/*.cpp",
+        "Asteroids/Resources/**",
     }
 
     includedirs
