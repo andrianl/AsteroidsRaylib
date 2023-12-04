@@ -43,6 +43,7 @@ project "raylib"
 project "Asteroids"
     kind "ConsoleApp"
     language "C++"
+    cppdialect "C++20"  -- Тут вказуємо версію С++
     targetdir ("Binary/%{cfg.buildcfg}/%{cfg.platform}/Asteroids")
 
     files
@@ -56,11 +57,14 @@ project "Asteroids"
     {
         "Asteroids/Include",
         "raylib/src",
+        "entt/src",
     }
 
     links
     {
-        "raylib"
+        "raylib",
+        "Binary/%{cfg.buildcfg}/%{cfg.platform}/raylib/raylib.lib",
+        "winmm.lib",
     }
 
     filter "system:windows"
