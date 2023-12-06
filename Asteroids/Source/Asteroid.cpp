@@ -1,22 +1,54 @@
-#include "Asteroid.h" 
+#include "Asteroid.h"
 #include "raymath.h"
- 
-//Asteroid::Asteroid() 
-//{ 
-//    // Constructor implementation goes here 
-//} 
+#include "iostream"
+
+// Asteroid::Asteroid()
+//{
+//     // Constructor implementation goes here
+// }
 
 Asteroid::Asteroid(Vector2 InLocation, Vector2 InVelocity)
-    : Location(InLocation), Velocity(InVelocity), AsteroidSize(AsteroidSizeEnum::Big),
-    Rotation(GetRandomValue(0, 360)), 
-    RotationSpeed(GetRandomValue(MinRotationSpeed, MaxRotationSpeed)), IsActive(true)
+    : Object(),
+      Location(InLocation), Velocity(InVelocity), AsteroidSize(AsteroidSizeEnum::Big),
+      Rotation(GetRandomValue(-360, 360)),
+      RotationSpeed(GetRandomValue(-MaxRotationSpeed, MaxRotationSpeed))
 {
-
 }
+
+bool Asteroid::CheckCollisionWithAsteroids(Asteroid& LHS, Asteroid& RHS)
+{
+    const auto Location1 = LHS.GetLocation();
+    const auto Location2 = RHS.GetLocation();
+    constexpr float Radius = 64;
+
+    const bool isColliding = CheckCollisionCircles(Location1, Radius, Location2, Radius);
+
+    if (isColliding)
+    {
+        LHS.SetIsDestroyed(true);
+        RHS.SetIsDestroyed(true);
+    }
+
+    return isColliding;
+}
+
 
 Asteroid Asteroid::CreateAsteroid(Vector2 InLocation, Vector2 InVelocity)
 {
     return Asteroid(InLocation, InVelocity);
+}
+
+void Asteroid::BeginPlay()
+{
+}
+
+void Asteroid::Tick(const float DeltaTime)
+{
+    if (!GetIsDestroyed())
+    {
+        Update(DeltaTime);
+        Draw();
+    }
 }
 
 void Asteroid::Update(const float DeltaTime)
@@ -28,8 +60,5 @@ void Asteroid::Update(const float DeltaTime)
 
 void Asteroid::Draw() const
 {
-    if (IsActive)
-    {
-        DrawPolyLines(Location, 3, 64, Rotation, WHITE);
-    }
+  DrawTriangle(Location, Radius, Rotation, WHITE); 
 }
